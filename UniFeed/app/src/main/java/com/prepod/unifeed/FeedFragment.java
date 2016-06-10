@@ -14,11 +14,16 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     SwipeRefreshLayout mSwipe;
+    private List<Feed> feedList = new ArrayList<>();
 
     public FeedFragment() {
         super();
@@ -46,10 +51,30 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
-            /* handle the result */
 
                         JSONObject array = response.getJSONObject();
                         Log.v("My", "" + array);
+
+                        try {
+                            JSONArray data = array.getJSONArray("data");
+                            for (int i=0; i<data.length(); i++){
+                                JSONObject obj = data.getJSONObject(i);
+                                Feed feed = new Feed();
+                                feed.setId(obj.getString("id"));
+                                feed.setCreatedTime(obj.getString("created_time"));
+                                feed.setStroy("");
+                                try {
+                                    feed.setStroy(obj.getString("story"));
+                                } catch (JSONException e){
+                                    Log.e("My", "!!!! " + e);
+                                }
+
+                                feedList.add(feed);
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
         ).executeAsync();
@@ -61,7 +86,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
-       
+
                         JSONObject array = response.getJSONObject();
                         Log.v("My", "" + array);
                     }
