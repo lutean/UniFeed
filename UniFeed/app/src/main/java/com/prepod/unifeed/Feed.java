@@ -8,6 +8,7 @@ public class Feed {
     private String id;
     private String createdTime;
     private String stroy;
+    private Long timeStamp;
 
     public void setId(String id) {
         this.id = id;
@@ -21,6 +22,10 @@ public class Feed {
         this.stroy = stroy;
     }
 
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
     public String getId() {
         return id;
     }
@@ -31,5 +36,9 @@ public class Feed {
 
     public String getStroy() {
         return stroy;
+    }
+
+    public Long getTimeStamp() {
+        return timeStamp;
     }
 }

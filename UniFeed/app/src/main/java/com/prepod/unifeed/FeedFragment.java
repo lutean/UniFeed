@@ -17,7 +17,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
@@ -63,6 +66,8 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 feed.setId(obj.getString("id"));
                                 feed.setCreatedTime(obj.getString("created_time"));
                                 feed.setStroy("");
+                                feed.setTimeStamp(Util.getTimeStamp(feed.getCreatedTime()));
+
                                 try {
                                     feed.setStroy(obj.getString("story"));
                                 } catch (JSONException e){
@@ -70,6 +75,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 }
 
                                 feedList.add(feed);
+                                getPost(feed);
 
                             }
                         } catch (JSONException e) {
@@ -93,6 +99,25 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
         ).executeAsync();
 */
+    }
+
+    private void getPost(Feed feed) {
+
+        String id = feed.getId();
+
+        Bundle params = new Bundle();
+        params.putString("fields", "link");
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + id,
+                params,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        Log.v("My", " " + response);
+                    }
+                }
+        ).executeAsync();
     }
 
     @Override
