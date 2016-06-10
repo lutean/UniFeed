@@ -47,10 +47,14 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
+        Bundle params = new Bundle();
+        params.putString("fields", "link,message,picture");
+
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
                 "/me/feed",
-                null,
+                params,
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
@@ -75,7 +79,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 }
 
                                 feedList.add(feed);
-                                getPost(feed);
+                               // getPost(feed);
 
                             }
                         } catch (JSONException e) {
@@ -100,13 +104,13 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         ).executeAsync();
 */
     }
-
+/*
     private void getPost(Feed feed) {
 
         String id = feed.getId();
 
         Bundle params = new Bundle();
-        params.putString("fields", "link");
+        params.putString("fields", "link,message,caption");
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
                 "/" + id,
@@ -119,6 +123,8 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
         ).executeAsync();
     }
+*/
+
 
     @Override
     public void onRefresh() {

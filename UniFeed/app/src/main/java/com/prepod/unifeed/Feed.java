@@ -10,6 +10,13 @@ public class Feed {
     private String stroy;
     private Long timeStamp;
 
+    private String message; //The status message in the post.
+    private String link; //The link attached to this post.
+    private String caption; //The caption of a link in the post (appears beneath the name).
+    private String description; //A description of a link in the post (appears beneath the caption).
+    private String picture; //The picture scraped from any link included with the post.
+    private String source; //A URL to any Flash movie or video file attached to the post.
+
     public void setId(String id) {
         this.id = id;
     }
@@ -26,6 +33,30 @@ public class Feed {
         this.timeStamp = timeStamp;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     public String getId() {
         return id;
     }
@@ -40,5 +71,29 @@ public class Feed {
 
     public Long getTimeStamp() {
         return timeStamp;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public String getSource() {
+        return source;
     }
 }
