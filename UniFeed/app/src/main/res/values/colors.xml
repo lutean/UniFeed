@@ -3,4 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#ffffff</color>
+    <color name="feed_bg">#ffffff</color>
+    <color name="feed_item_bg">#ffffff</color>
+    <color name="feed_item_border">#EEFCFF</color>
+    <color name="link">#0a80d1</color>
+    <color name="link1">#ffa7deff</color>
+    <color name="timestamp">#a0a3a7</color>
+    <color name="hashtag">#DAB78F</color>
+
 </resources>
