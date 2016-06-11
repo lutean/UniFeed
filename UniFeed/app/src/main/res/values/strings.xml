@@ -1,7 +1,7 @@
 <resources>
 
     <string name="facebook_app_id">273740379647214</string>
-
+    <integer name="com_vk_sdk_AppId">5502744</integer>
 
     <string name="app_name">UniFeed</string>
 </resources>

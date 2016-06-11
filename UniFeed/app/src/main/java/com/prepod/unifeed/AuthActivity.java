@@ -13,12 +13,24 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKError;
 
 public class AuthActivity extends FragmentActivity {
 
     private CallbackManager callbackManager;
     private AccessToken accessToken;
     private AccessTokenTracker accessTokenTracker;
+
+    private static final String[] sMyScope = new String[] {
+            VKScope.FRIENDS,
+            VKScope.WALL,
+            VKScope.PHOTOS,
+            VKScope.NOHTTPS,
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +90,25 @@ public class AuthActivity extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        final Intent dialogIntent = new Intent(this, MainActivity.class);
+        if (requestCode == 64206) {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            VKSdk.login(this, sMyScope);
+        }
+        if (requestCode == 10485) {
+            if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+                @Override
+                public void onResult(VKAccessToken res) {
+                    startActivity(dialogIntent);
+                }
 
-        Intent dialogIntent = new Intent(this, MainActivity.class);
-        startActivity(dialogIntent);
+                @Override
+                public void onError(VKError error) {
+                }
+            })) {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
 
+        }
     }
 }

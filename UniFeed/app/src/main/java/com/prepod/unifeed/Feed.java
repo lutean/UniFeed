@@ -17,6 +17,8 @@ public class Feed {
     private String picture; //The picture scraped from any link included with the post.
     private String source; //A URL to any Flash movie or video file attached to the post.
 
+    private String ownerId;
+
     public void setId(String id) {
         this.id = id;
     }
@@ -57,6 +59,10 @@ public class Feed {
         this.source = source;
     }
 
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
     public String getId() {
         return id;
     }
@@ -95,5 +101,9 @@ public class Feed {
 
     public String getSource() {
         return source;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
     }
 }

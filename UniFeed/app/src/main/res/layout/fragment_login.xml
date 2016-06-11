@@ -2,12 +2,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/container"
-    android:background="#136990"
+    android:background="#000000"
     android:weightSum="100">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:alpha=".50"
         android:src="@drawable/nl2"
         android:scaleType="centerCrop"/>
 
