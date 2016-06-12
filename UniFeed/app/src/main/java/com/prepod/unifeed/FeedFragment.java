@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -32,7 +33,11 @@ import java.util.List;
 public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     SwipeRefreshLayout mSwipe;
+    private FeedListAdapter feedListAdapter;
+    private ListView listView;
+
     private List<Feed> feedList = new ArrayList<>();
+    private List<Person> personList = new ArrayList<>();
 
     public FeedFragment() {
         super();
@@ -52,6 +57,12 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        listView = (ListView)getView().findViewById(R.id.fragment_feed_body);
+        listView.setDivider(null);
+        feedListAdapter = new FeedListAdapter(getActivity(), feedList);
+
+        listView.setAdapter(feedListAdapter);
 
 
         Bundle params = new Bundle();
@@ -112,7 +123,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                     Log.e("My", "!!!! " + e);
                                 }
 
-                                feedList.add(feed);
+                                //feedList.add(feed);
                                // getPost(feed);
                             }
                         } catch (JSONException e) {
@@ -185,6 +196,19 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (object.has("response")) {
                     JSONObject responseObj = object.optJSONObject("response");
                     try {
+
+                        JSONArray profiles = (JSONArray) responseObj.get("profiles");
+                        for (int i=0; i < profiles.length(); i++){
+                            JSONObject profile = (JSONObject) profiles.get(i);
+                            Person person = new Person();
+                            person.setFirstName(profile.getString("first_name"));
+                            person.setLastName(profile.getString("last_name"));
+                            person.setAvaUrl(profile.getString("photo_100"));
+                            person.setId(profile.getString("id"));
+                            personList.add(person);
+                        }
+
+
                         JSONArray items = (JSONArray)responseObj.get("items");
                         for (int i=0; i < items.length(); i++){
                             JSONObject item = (JSONObject)items.get(i);
@@ -192,7 +216,88 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             if (item.getString("text") != null)
                                 feed.setMessage(item.getString("text"));
                             feed.setTimeStamp(Long.parseLong(item.getString("date")));
-                            feed.setOwnerId(item.getString("owner_id"));
+                            feed.setFromId(item.getString("from_id"));
+
+                            for (Person person : personList) {
+                                if (feed.getFromId().equals(person.getId())){
+                                    feed.setPerson(person);
+                                }
+                            }
+
+                            if(item.has("copy_history")){
+
+                                feed.setLink("http://vk.com/wall" + item.getString("from_id") + "_" + item.getString("id"));
+                            }
+
+                            if (item.has("attachments")) {
+                                JSONArray attachments = (JSONArray) item.get("attachments");
+                                for (int j = 0; j < attachments.length(); j++) {
+                                    JSONObject attachment = (JSONObject) attachments.get(j);
+                                    if (attachment.getString("type") != null)
+                                        switch (attachment.getString("type")) {
+                                            case "photo":
+                                                JSONObject photo = attachment.getJSONObject("photo");
+                                                Attachment photoAttachment = new Attachment();
+                                                photoAttachment.setPhoto(photo.getString("photo_604"));
+                                                photoAttachment.setText(photo.getString("text"));
+                                                feed.setPicture(photoAttachment.getPhoto());
+                                                if (!feed.getMessage().equals("")) {
+                                                    feed.setMessage(feed.getMessage() + "\n" + photoAttachment.getText());
+                                                } else {
+                                                    feed.setMessage(photoAttachment.getText());
+                                                }
+                                                break;
+                                            case "doc":
+                                                JSONObject doc = attachment.getJSONObject("doc");
+                                                Attachment docAttachment = new Attachment();
+                                                docAttachment.setPhoto(doc.getString("photo_130"));
+                                                docAttachment.setUrl(doc.getString("url"));
+                                                feed.setPicture(docAttachment.getPhoto());
+                                                feed.setLink(docAttachment.getUrl());
+                                                break;
+                                            case "video":
+                                                JSONObject video = attachment.getJSONObject("video");
+                                                Attachment videoAttachment = new Attachment();
+                                                videoAttachment.setPhoto(video.getString("photo_130"));
+                                                //videoAttachment.setUrl(video.getString("url"));
+                                                videoAttachment.setText(video.getString("title"));
+                                                feed.setPicture(videoAttachment.getPhoto());
+                                                if (!feed.getMessage().equals("")) {
+                                                    feed.setMessage(feed.getMessage() + "\n" + videoAttachment.getText());
+                                                } else {
+                                                    feed.setMessage(videoAttachment.getText());
+                                                }
+                                                break;
+                                            case "link":
+                                                JSONObject link = attachment.getJSONObject("link");
+                                                Attachment linkAttachment = new Attachment();
+                                                if (link.has("image_src"))
+                                                    linkAttachment.setPhoto(link.getString("image_src"));
+                                                linkAttachment.setUrl(link.getString("url"));
+                                                linkAttachment.setTitle(link.getString("title"));
+                                                linkAttachment.setDescription(link.getString("description"));
+                                                feed.setLink(linkAttachment.getUrl());
+                                                feed.setPicture(linkAttachment.getPhoto());
+                                                if (!feed.getMessage().equals("")) {
+                                                    feed.setMessage(feed.getMessage()
+                                                            + "\n"
+                                                            + linkAttachment.getTitle()
+                                                            + "\n"
+                                                            + linkAttachment.getDescription());
+                                                } else {
+                                                    feed.setMessage(linkAttachment.getTitle()
+                                                            + "\n"
+                                                            + linkAttachment.getDescription());
+                                                }
+                                                break;
+
+                                        }
+                                }
+                            }
+
+                            feedList.add(feed);
+
+                            //Log.v("My", " " + attachments);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -200,8 +305,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     Log.v("My", " " + responseObj);
                 }
 
-
-
+                feedListAdapter.notifyDataSetChanged();
 //Do complete stuff
             }
             @Override

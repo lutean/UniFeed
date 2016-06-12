@@ -19,6 +19,10 @@ public class Feed {
 
     private String ownerId;
 
+    private Person person;
+
+    private String fromId;
+
     public void setId(String id) {
         this.id = id;
     }
@@ -63,6 +67,14 @@ public class Feed {
         this.ownerId = ownerId;
     }
 
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public void setFromId(String fromId) {
+        this.fromId = fromId;
+    }
+
     public String getId() {
         return id;
     }
@@ -105,5 +117,13 @@ public class Feed {
 
     public String getOwnerId() {
         return ownerId;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public String getFromId() {
+        return fromId;
     }
 }
