@@ -70,8 +70,18 @@ public class AuthActivity extends FragmentActivity {
             }
         };
 
-        showLogin();
+        if (AccessToken.getCurrentAccessToken()!=null){
+            if (VKSdk.isLoggedIn()){
+                Intent dialogIntent = new Intent(this, MainActivity.class);
+                startActivity(dialogIntent);
 
+            } else {
+                VKSdk.login(this, sMyScope);
+            }
+        } else {
+
+            showLogin();
+        }
     }
 
     private void showLogin() {

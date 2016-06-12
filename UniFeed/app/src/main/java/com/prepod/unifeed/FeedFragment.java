@@ -28,6 +28,8 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -69,6 +71,14 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         listView.setAdapter(feedListAdapter);
 
 
+
+        getWallFb();
+
+        getWallVk();
+    }
+
+    private void getWallFb(){
+
         Bundle params = new Bundle();
         params.putString("fields", "link,message,picture,from,created_time");
 
@@ -98,7 +108,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 }
                                 if (!personsListFb.contains(person)) {
                                     personsListFb.add(person);
-                                   // getFbAva(person.getId());
+                                    // getFbAva(person.getId());
                                 }
 
 
@@ -154,7 +164,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 }
 
                                 feedList.add(feed);
-                               // getPost(feed);
+                                // getPost(feed);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -168,7 +178,6 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         ).executeAsync();
 
 
-        getWallVk();
     }
 
 /*
@@ -202,7 +211,9 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
 
         }
+        Collections.sort(feedList);
         feedListAdapter.notifyDataSetChanged();
+        mSwipe.setRefreshing(false);
     }
 
     private void getFeedVk(){
@@ -343,7 +354,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 }
                             }
 
-                            //feedList.add(feed);
+                            feedList.add(feed);
 
                             //Log.v("My", " " + attachments);
                         }
@@ -352,8 +363,8 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     }
                     Log.v("My", " " + responseObj);
                 }
-
-               // feedListAdapter.notifyDataSetChanged();
+                Collections.sort(feedList);
+                feedListAdapter.notifyDataSetChanged();
 //Do complete stuff
             }
             @Override
@@ -428,8 +439,16 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         ).executeAsync();
     }
 
+    private void sortFeedList(){
+
+    }
+
     @Override
     public void onRefresh() {
         mSwipe.setRefreshing(true);
+        feedList.clear();
+        feedListAdapter.notifyDataSetChanged();
+        getWallFb();
+        getWallVk();
     }
 }

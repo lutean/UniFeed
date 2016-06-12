@@ -3,7 +3,18 @@ package com.prepod.unifeed;
 /**
  * Created by Антон on 10.06.2016.
  */
-public class Feed {
+public class Feed implements Comparable<Feed>{
+
+    @Override
+    public int compareTo(Feed another) {
+        if (timeStamp < another.timeStamp){
+            return 1;
+        }
+        if (timeStamp > another.timeStamp){
+            return -1;
+        }
+            return 0;
+    }
 
     private String id;
     private String createdTime;
