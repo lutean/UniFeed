@@ -188,7 +188,7 @@ public class FeedListAdapter extends BaseAdapter {
             //CharSequence timeAgo = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date(item.getTimeStamp() * 1000));
             //timestamp.setText(timeAgo);
 
-            Long tada = item.getTimeStamp() * 1000;
+            Long tada = item.getTimeStamp();
             Long shas = System.currentTimeMillis();
             CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
                     tada,

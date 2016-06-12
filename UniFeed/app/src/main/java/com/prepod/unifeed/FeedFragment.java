@@ -1,5 +1,6 @@
 package com.prepod.unifeed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,7 +29,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
@@ -38,6 +41,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private List<Feed> feedList = new ArrayList<>();
     private List<Person> personList = new ArrayList<>();
+    private List<Person> personsListFb = new ArrayList<>();
 
     public FeedFragment() {
         super();
@@ -66,7 +70,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 
         Bundle params = new Bundle();
-        params.putString("fields", "link,message,picture");
+        params.putString("fields", "link,message,picture,from,created_time");
 
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
@@ -83,25 +87,50 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             JSONArray data = array.getJSONArray("data");
                             for (int i=0; i<data.length(); i++){
                                 JSONObject obj = data.getJSONObject(i);
+                                JSONObject from = obj.getJSONObject("from");
+                                Person person = new Person();
+                                person.setFirstName(from.getString("name"));
+                                person.setLastName("");
+                                person.setId(from.getString("id"));
+                                if (personsListFb.size() == 0){
+                                    personsListFb.add(person);
+                                    //getFbAva(person.getId());
+                                }
+                                if (!personsListFb.contains(person)) {
+                                    personsListFb.add(person);
+                                   // getFbAva(person.getId());
+                                }
+
+
                                 Feed feed = new Feed();
+                                feed.setPerson(person);
                                 feed.setId(obj.getString("id"));
-                                feed.setCreatedTime(obj.getString("created_time"));
-                                feed.setStroy("");
-                                feed.setCaption("");
-                                feed.setDescription("");
-                                feed.setMessage("");
-                                feed.setPicture("");
-                                feed.setTimeStamp(Util.getTimeStamp(feed.getCreatedTime()));
+
+                                try {
+                                    feed.setLink(obj.getString("link"));
+                                } catch (JSONException e){
+                                    feed.setLink("");
+                                    Log.e("My", "!!!! " + e);
+                                }
+
+                                try {
+                                    feed.setCreatedTime(obj.getString("created_time"));
+                                    feed.setTimeStamp(Util.getTimeStamp(feed.getCreatedTime()));
+                                } catch (JSONException e){
+                                    Log.e("My", "!!!! " + e);
+                                }
 
                                 try {
                                     feed.setStroy(obj.getString("story"));
                                 } catch (JSONException e){
+                                    feed.setStroy("");
                                     Log.e("My", "!!!! " + e);
                                 }
 
                                 try {
                                     feed.setCaption(obj.getString("caption"));
                                 } catch (JSONException e){
+                                    feed.setCaption("");
                                     Log.e("My", "!!!! " + e);
                                 }
 
@@ -114,6 +143,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 try {
                                     feed.setMessage(obj.getString("message"));
                                 } catch (JSONException e){
+                                    feed.setMessage("");
                                     Log.e("My", "!!!! " + e);
                                 }
 
@@ -123,15 +153,20 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                     Log.e("My", "!!!! " + e);
                                 }
 
-                                //feedList.add(feed);
+                                feedList.add(feed);
                                // getPost(feed);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        getFbAva();
+
+
+                        Log.v("My", "" + personsListFb);
                     }
                 }
         ).executeAsync();
+
 
         getWallVk();
     }
@@ -156,6 +191,19 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         ).executeAsync();
     }
 */
+
+    private void storeAva(){
+
+        for (int i=0; i < feedList.size(); i++){
+            for (int j=0; j < personsListFb.size(); j++){
+                if(feedList.get(i).getPerson().getId().equals(personsListFb.get(j).getId())){
+                    feedList.get(i).getPerson().setAvaUrl(personsListFb.get(j).getAvaUrl());
+                }
+            }
+
+        }
+        feedListAdapter.notifyDataSetChanged();
+    }
 
     private void getFeedVk(){
         VKRequest request = new VKRequest("newsfeed.get", VKParameters.from(VKApiConst.FILTERS, "post"));
@@ -215,7 +263,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             Feed feed = new Feed();
                             if (item.getString("text") != null)
                                 feed.setMessage(item.getString("text"));
-                            feed.setTimeStamp(Long.parseLong(item.getString("date")));
+                            feed.setTimeStamp(Long.parseLong(item.getString("date")) * 1000);
                             feed.setFromId(item.getString("from_id"));
 
                             for (Person person : personList) {
@@ -295,7 +343,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 }
                             }
 
-                            feedList.add(feed);
+                            //feedList.add(feed);
 
                             //Log.v("My", " " + attachments);
                         }
@@ -305,7 +353,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     Log.v("My", " " + responseObj);
                 }
 
-                feedListAdapter.notifyDataSetChanged();
+               // feedListAdapter.notifyDataSetChanged();
 //Do complete stuff
             }
             @Override
@@ -321,6 +369,64 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
     }
 
+    public void getFbAva(){
+
+        String ids = "";
+        for (int i=0; i < personsListFb.size(); i++){
+            ids = ids + personsListFb.get(i).getId();
+            if (i != personsListFb.size() - 1)
+                ids = ids + ",";
+        }
+
+        Bundle params = new Bundle();
+        params.putString("ids", ids);
+        params.putBoolean("redirect", false);
+        params.putString("height", "200");
+        params.putString("type", "normal");
+        params.putString("width", "200");
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/picture",
+                params,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+
+
+
+                        JSONObject json = (JSONObject)response.getJSONObject();
+                        Log.v("My", " " + json);
+
+                        for (int i=0; i < personsListFb.size(); i++){
+                            try {
+                                JSONObject obj = json.getJSONObject(personsListFb.get(i).getId());
+                                JSONObject data = obj.getJSONObject("data");
+                                String url = data.getString("url");
+                                personsListFb.get(i).setAvaUrl(url);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        storeAva();
+
+                      /*  try {
+                            JSONObject pic = json.getJSONObject("data");
+                            String avaUrl = pic.optString("url");
+                            for (int i=0; i < personsListFb.size();  i++){
+                                if (personsListFb.get(i).getId().equals(id)){
+                                    personsListFb.get(i).setAvaUrl(avaUrl);
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+*/
+                    }
+                }
+        ).executeAsync();
+    }
 
     @Override
     public void onRefresh() {
