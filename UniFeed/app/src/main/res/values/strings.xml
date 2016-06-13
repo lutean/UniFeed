@@ -4,4 +4,12 @@
     <integer name="com_vk_sdk_AppId">5502744</integer>
 
     <string name="app_name">UniFeed</string>
+
+    <array name="drawer_list">
+        <item>Logout</item>
+    </array>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
 </resources>

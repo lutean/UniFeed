@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -67,6 +68,8 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         listView = (ListView)getView().findViewById(R.id.fragment_feed_body);
         listView.setDivider(null);
         feedListAdapter = new FeedListAdapter(getActivity(), feedList);
+
+
 
         listView.setAdapter(feedListAdapter);
 

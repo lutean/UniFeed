@@ -1,17 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/content_frame"
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-</LinearLayout>
+
+
+            <android.support.v4.widget.DrawerLayout
+                android:id="@+id/drawer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- This is how your main page will look, just 2 buttons -->
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical">
+                    <include layout="@layout/toolbar" />
+                    <FrameLayout
+                        android:id="@+id/content_frame"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+
+                    <!-- Left Drawrer -->
+
+                </LinearLayout>
+
+                <!-- Right Drawrer -->
+
+                <RelativeLayout
+                    android:id="@+id/whatYouWantInRightDrawer"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left" >
+
+                    <LinearLayout
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:id="@+id/logoCont1"
+                        android:paddingBottom="@dimen/feed_item_padding_top_bottom"
+                        android:paddingTop="@dimen/feed_item_padding_top_bottom"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff">
+
+                        <com.prepod.unifeed.RoundedImage
+                            android:id="@+id/drawer_pic"
+                            android:clickable="true"
+                            android:layout_width="@dimen/feed_item_profile_pic"
+                            android:layout_height="@dimen/feed_item_profile_pic"
+                            android:layout_marginLeft="10dp"
+                            android:scaleType="fitCenter">
+                        </com.prepod.unifeed.RoundedImage>
+                        <com.prepod.unifeed.RoundedImage
+                            android:id="@+id/drawer_pic2"
+                            android:clickable="true"
+                            android:layout_width="@dimen/feed_item_profile_pic"
+                            android:layout_height="@dimen/feed_item_profile_pic"
+                            android:layout_marginLeft="10dp"
+                            android:scaleType="fitCenter">
+                        </com.prepod.unifeed.RoundedImage>
+
+                    </LinearLayout>
+
+                    <ListView
+                        android:layout_below="@+id/logoCont1"
+                        android:id="@+id/left_drawer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter"
+                        android:background="#ffffff"
+                        />
+
+                    <!-- android:background="#bd384555"/>
+                  you can have many more widgets here like buttons or labels -->
+                </RelativeLayout>
+
+            </android.support.v4.widget.DrawerLayout>
+        </LinearLayout>
