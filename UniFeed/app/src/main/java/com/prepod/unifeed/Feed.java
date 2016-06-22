@@ -16,6 +16,12 @@ public class Feed implements Comparable<Feed>{
             return 0;
     }
 
+    public Feed(int feedSource){
+
+        this.feedSource = feedSource;
+
+    }
+
     private String id;
     private String createdTime;
     private String stroy;
@@ -33,6 +39,8 @@ public class Feed implements Comparable<Feed>{
     private Person person;
 
     private String fromId;
+
+    private int feedSource;
 
     public void setId(String id) {
         this.id = id;
@@ -86,6 +94,10 @@ public class Feed implements Comparable<Feed>{
         this.fromId = fromId;
     }
 
+    public void setFeedSource(int feedSource) {
+        this.feedSource = feedSource;
+    }
+
     public String getId() {
         return id;
     }
@@ -136,5 +148,9 @@ public class Feed implements Comparable<Feed>{
 
     public String getFromId() {
         return fromId;
+    }
+
+    public int getFeedSource() {
+        return feedSource;
     }
 }

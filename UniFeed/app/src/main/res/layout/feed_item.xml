@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_toRightOf="@+id/profilePic"
-                android:layout_toLeftOf="@+id/delBtn"
+                android:layout_toLeftOf="@+id/sourceIcon"
                 android:paddingLeft="@dimen/feed_item_profile_info_padd" >
 
                 <TextView
@@ -79,13 +79,13 @@
             </LinearLayout>
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
+                android:layout_width="@dimen/source_icon"
+                android:layout_height="@dimen/source_icon"
 
-                android:id="@+id/delBtn"
+
+                android:id="@+id/sourceIcon"
                 android:layout_alignParentRight="true"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
         </RelativeLayout>
 

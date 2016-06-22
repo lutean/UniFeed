@@ -44,6 +44,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private List<Feed> feedList = new ArrayList<>();
     private List<Person> personList = new ArrayList<>();
+    private List<Person> groupsList = new ArrayList<>();
     private List<Person> personsListFb = new ArrayList<>();
 
     public FeedFragment() {
@@ -87,7 +88,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
-                "/me/feed",
+                "/112821225446278/feed",
                 params,
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
@@ -115,7 +116,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 }
 
 
-                                Feed feed = new Feed();
+                                Feed feed = new Feed(Consts.SOURCE_FB);
                                 feed.setPerson(person);
                                 feed.setId(obj.getString("id"));
 
@@ -249,7 +250,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void getWallVk(){
-        VKRequest request = VKApi.wall().get(VKParameters.from(VKApiConst.COUNT, 50, VKApiConst.EXTENDED, 1));
+        VKRequest request = VKApi.wall().get(VKParameters.from(VKApiConst.OWNER_ID, -24739958, VKApiConst.COUNT, 50, VKApiConst.EXTENDED, 1));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -270,21 +271,40 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             personList.add(person);
                         }
 
+                        JSONArray groups = (JSONArray) responseObj.get("groups");
+                        for (int i=0; i < groups.length(); i++){
+                            JSONObject group = (JSONObject) groups.get(i);
+                            Person person = new Person();
+                            person.setFirstName(group.getString("name"));
+                            person.setLastName("");
+                            person.setAvaUrl(group.getString("photo_100"));
+                            person.setId(group.getString("id"));
+                            groupsList.add(person);
+                        }
+
 
                         JSONArray items = (JSONArray)responseObj.get("items");
                         for (int i=0; i < items.length(); i++){
                             JSONObject item = (JSONObject)items.get(i);
-                            Feed feed = new Feed();
+                            Feed feed = new Feed(Consts.SOURCE_VK);
                             if (item.getString("text") != null)
                                 feed.setMessage(item.getString("text"));
                             feed.setTimeStamp(Long.parseLong(item.getString("date")) * 1000);
                             feed.setFromId(item.getString("from_id"));
 
+                            if (feed.getFromId().contains("-")){
+                                String[] temp = feed.getFromId().split("-");
+                                for (Person person : groupsList) {
+                                    if (temp[1].equals(person.getId())){
+                                        feed.setPerson(person);
+                                    }
+                                }
+                            } else {
                             for (Person person : personList) {
                                 if (feed.getFromId().equals(person.getId())){
                                     feed.setPerson(person);
                                 }
-                            }
+                            }}
 
                             if(item.has("copy_history")){
 

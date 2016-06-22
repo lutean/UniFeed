@@ -13,9 +13,6 @@ import com.facebook.login.LoginManager;
 
 import java.util.Arrays;
 
-/**
- * Created by Антон on 10.06.2016.
- */
 public class LoginFragment extends Fragment {
 
     private RelativeLayout loginBtn;

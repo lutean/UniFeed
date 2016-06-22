@@ -30,4 +30,6 @@
     <dimen name="feed_image_h">250dp</dimen>
     <dimen name="logo_hw">50dp</dimen>
 
+    <dimen name="source_icon">25dp</dimen>
+
 </resources>

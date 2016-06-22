@@ -26,7 +26,7 @@ public class FeedListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private List<Feed> feedList;
 
-    public ImageView delBtn;
+    public ImageView srcFeed;
     ImageLoader imageLoader = UniFeed.getInstance().getImageLoader();
 
     public FeedListAdapter(Activity activity, List<Feed> feedLsit) {
@@ -76,8 +76,8 @@ public class FeedListAdapter extends BaseAdapter {
         FeedImageView feedImageView = (FeedImageView) convertView
                 .findViewById(R.id.feedImage1);
 
-        delBtn = (ImageView) convertView
-                .findViewById(R.id.delBtn);
+        srcFeed = (ImageView) convertView
+                .findViewById(R.id.sourceIcon);
 
         LinearLayout itemLL = (LinearLayout) convertView.findViewById(R.id.itemLL);
 
@@ -86,27 +86,38 @@ public class FeedListAdapter extends BaseAdapter {
 
         Feed item = feedList.get(position);
 
-        name.setText(item.getPerson().getFirstName() + " " + item.getPerson().getLastName());
+        Person person = item.getPerson();
+        /*
+        String firstName = item.getPerson().getFirstName();
+        String lastName = item.getPerson().getLastName();
+        if (firstName == null){
+            firstName = "";
+        }
+        if (lastName == null){
+            lastName = "";
+        }*/
+        if (person != null)
+            name.setText(item.getPerson().getFirstName() + " " + item.getPerson().getLastName());
 /*
         List<String> tags = new ArrayList<String>();
         tags.add(item.getId());
         tags.add(String.valueOf(position));
 
-        delBtn.setTag(tags);
+        srcFeed.setTag(tags);
 
         if (item.getDelBtn() == "true"){
-        delBtn.setVisibility(View.VISIBLE);
+        srcFeed.setVisibility(View.VISIBLE);
 
-            delBtn.setImageResource(R.drawable.wall_del_g);
+            srcFeed.setImageResource(R.drawable.wall_del_g);
 
 
 
-            delBtn.setOnClickListener(new View.OnClickListener() {
+            srcFeed.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int pos = Integer.parseInt(((List<String>) delBtn.getTag()).get(1).toString());
+                    int pos = Integer.parseInt(((List<String>) srcFeed.getTag()).get(1).toString());
 
-                    alert(((List<String>) delBtn.getTag()).get(0).toString(), pos);
+                    alert(((List<String>) srcFeed.getTag()).get(0).toString(), pos);
                 }
 
             });
@@ -114,16 +125,16 @@ public class FeedListAdapter extends BaseAdapter {
 
         }else
         {
-            delBtn.setVisibility(View.INVISIBLE);
+            srcFeed.setVisibility(View.INVISIBLE);
         }
 */
 
 
 
 /*
-        delBtn.setTag(item.getId());
+        srcFeed.setTag(item.getId());
 
-        delBtn.setOnClickListener(new View.OnClickListener() {
+        srcFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String id =  (String) view.getTag();
@@ -224,7 +235,15 @@ public class FeedListAdapter extends BaseAdapter {
         }
 
         // user profile pic
+
+        if (person != null)
         profilePic.setImageUrl(item.getPerson().getAvaUrl(), imageLoader);
+
+        if (item.getFeedSource() == Consts.SOURCE_FB){
+            srcFeed.setImageResource(R.drawable.fb);
+        } else {
+            srcFeed.setImageResource(R.drawable.vk);
+        }
 
         // Feed image
         if (item.getPicture() != null) {
