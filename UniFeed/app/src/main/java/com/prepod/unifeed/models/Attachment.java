@@ -1,4 +1,4 @@
-package com.prepod.unifeed;
+package com.prepod.unifeed.models;
 
 public class Attachment{
 

@@ -1,4 +1,4 @@
-package com.prepod.unifeed;
+package com.prepod.unifeed.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,14 +8,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -24,10 +22,12 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
+import com.prepod.unifeed.adapters.CustomDrawerAdapter;
+import com.prepod.unifeed.models.DrawerItem;
+import com.prepod.unifeed.fragments.FeedFragment;
+import com.prepod.unifeed.views.RoundedImage;
+import com.prepod.unifeed.UniFeed;
 import com.vk.sdk.VKSdk;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;

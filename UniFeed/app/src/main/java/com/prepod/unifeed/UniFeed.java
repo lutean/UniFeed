@@ -8,6 +8,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.facebook.FacebookSdk;
+import com.prepod.unifeed.views.LruBitmapCache;
 import com.vk.sdk.VKSdk;
 
 public class UniFeed extends Application {

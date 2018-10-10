@@ -1,4 +1,4 @@
-package com.prepod.unifeed;
+package com.prepod.unifeed.adapters;
 
 
 import android.app.Activity;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.prepod.unifeed.models.DrawerItem;
 
 import java.util.List;
 

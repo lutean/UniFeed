@@ -1,4 +1,4 @@
-package com.prepod.unifeed;
+package com.prepod.unifeed.adapters;
 
 
 import android.app.Activity;
@@ -18,6 +18,11 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.prepod.unifeed.Consts;
+import com.prepod.unifeed.models.Feed;
+import com.prepod.unifeed.views.FeedImageView;
+import com.prepod.unifeed.models.Person;
+import com.prepod.unifeed.UniFeed;
 
 import java.util.List;
 

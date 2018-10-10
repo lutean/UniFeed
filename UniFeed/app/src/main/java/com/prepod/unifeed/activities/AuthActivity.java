@@ -1,4 +1,4 @@
-package com.prepod.unifeed;
+package com.prepod.unifeed.activities;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +16,7 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.prepod.unifeed.fragments.LoginFragment;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;

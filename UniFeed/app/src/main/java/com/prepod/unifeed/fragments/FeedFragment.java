@@ -1,6 +1,5 @@
-package com.prepod.unifeed;
+package com.prepod.unifeed.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,12 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.prepod.unifeed.models.Attachment;
+import com.prepod.unifeed.Consts;
+import com.prepod.unifeed.models.Feed;
+import com.prepod.unifeed.adapters.FeedListAdapter;
+import com.prepod.unifeed.models.Person;
+import com.prepod.unifeed.Util;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
@@ -26,15 +30,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 

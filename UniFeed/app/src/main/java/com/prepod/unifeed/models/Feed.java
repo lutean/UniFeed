@@ -1,4 +1,4 @@
-package com.prepod.unifeed;
+package com.prepod.unifeed.models;
 
 /**
  * Created by Антон on 10.06.2016.

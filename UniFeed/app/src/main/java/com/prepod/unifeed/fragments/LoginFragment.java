@@ -1,4 +1,4 @@
-package com.prepod.unifeed;
+package com.prepod.unifeed.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;

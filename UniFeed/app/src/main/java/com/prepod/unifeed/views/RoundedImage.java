@@ -1,4 +1,4 @@
-package com.prepod.unifeed;
+package com.prepod.unifeed.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
